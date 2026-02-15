@@ -32,3 +32,5 @@ Thumbs.db
 # Coverage reports
 .coverage
 htmlcov/
+
+*.pem

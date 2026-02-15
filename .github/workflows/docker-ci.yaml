@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Deploy Docker Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,19 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t sumith815/calculator-app:latest .
+      run: docker build --pull -t sumith815/calculator-app:latest .
 
     - name: Push Docker image
       run: docker push sumith815/calculator-app:latest
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          docker pull sumith815/calculator-app:latest
+          docker stop calculator || true
+          docker rm calculator || true
+          docker run -d --restart unless-stopped --name calculator -p 8000:8000 sumith815/calculator-app:latest
