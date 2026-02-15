@@ -21,3 +21,7 @@ def multiply(a: int, b: int):
 @app.get("/divide")
 def divide(a: int, b: int):
     return {"result": a / b}
+
+@app.get("/pecentage")
+def pecentage(a: int, b: int):
+    return {"result": a % b}
