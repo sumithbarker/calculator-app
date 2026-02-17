@@ -25,3 +25,7 @@ def divide(a: int, b: int):
 @app.get("/pecentage")
 def pecentage(a: int, b: int):
     return {"result": a % b}
+
+@app.get("/square")
+def square(a: int):
+    return {"result": a ** 2}
